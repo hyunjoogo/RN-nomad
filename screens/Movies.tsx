@@ -4,6 +4,7 @@ import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import Swiper from "react-native-swiper";
 import {ActivityIndicator, Dimensions} from "react-native";
 import Slide from "../components/Slide";
+import Poster from "../components/Poster";
 
 const API_KEY = "34de53bc7d6248a1820c343b0e69d157";
 
@@ -16,6 +17,33 @@ const Loader = styled.View`
 `;
 
 const {height: SCREEN_HEIGHT} = Dimensions.get("window");
+
+const ListTitle = styled.Text`
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  margin-left: 30px;
+`;
+
+const TrendingScroll = styled.ScrollView`
+  margin-top: 20px;
+`;
+
+const Movie = styled.View`
+  margin-right: 20px;
+  align-items: center;
+`;
+
+const Title = styled.Text`
+  color: white;
+  font-weight: 600;
+  margin-top: 7px;
+  margin-bottom: 5px;
+`;
+const Votes = styled.Text`
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 10px;
+`;
 
 const Movies: React.FC<NativeStackScreenProps<any, 'Movies'>> = () => {
 
@@ -67,7 +95,7 @@ const Movies: React.FC<NativeStackScreenProps<any, 'Movies'>> = () => {
         showsButtons={false}
         showsPagination={true}
         paginationStyle={{bottom: 5}}
-        containerStyle={{width: "100%", height: SCREEN_HEIGHT / 4}}
+        containerStyle={{marginBottom: 30, width: "100%", height: SCREEN_HEIGHT / 4}}
       >
         {nowPlaying.map((movie) => <Slide
           key={movie.id}
@@ -78,6 +106,25 @@ const Movies: React.FC<NativeStackScreenProps<any, 'Movies'>> = () => {
           overview={movie.overview}
         />)}
       </Swiper>
+      <ListTitle>Trending Movies</ListTitle>
+      <TrendingScroll
+        contentContainerStyle={{ paddingLeft: 30 }}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+      >
+        {trending.map((movie) => {
+          return (
+            <Movie key={movie.id}>
+              <Poster path={movie.poster_path} />
+              <Title>
+                {movie.original_title.slice(0, 13)}
+                {movie.original_title.length > 13 ? "..." : null}
+              </Title>
+              <Votes>⭐️ {movie.vote_average}/10</Votes>
+            </Movie>
+          )
+        })}
+      </TrendingScroll>
     </Container>
   );
 }
